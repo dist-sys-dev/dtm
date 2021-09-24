@@ -1,17 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"strings"
+	"text/tabwriter"
 
 	"github.com/yedf/dtm/dtmcli"
 	"github.com/yedf/dtm/dtmsvr"
 	"github.com/yedf/dtm/examples"
 )
-
-// M alias
-type M = map[string]interface{}
 
 var usage = `dtm is a lightweight distributed transaction manager.
 
@@ -19,19 +18,11 @@ usage:
     dtm [command]
 
 Available commands:
-    dtmsvr         run dtm as a server
-    dev            create all needed table and run dtm as a server
-
-    quick_start    run quick start example (dtm will create needed table)
-    qs             same as quick_start
-`
+` + commands()
 
 func main() {
 	if len(os.Args) == 1 {
 		fmt.Println(usage)
-		for name := range examples.Samples {
-			fmt.Printf("%-18srun a sample includes %s\n", name, strings.Replace(name, "_", " ", 100))
-		}
 		return
 	}
 	if os.Args[1] != "dtmsvr" { // 实际线上运行，只启动dtmsvr，不准备table相关的数据
@@ -57,4 +48,32 @@ func main() {
 		sample.Action()
 	}
 	select {}
+}
+
+func commands() string {
+	b := bytes.Buffer{}
+	w := tabwriter.NewWriter(&b, 4, 4, 1, ' ', 0)
+
+	type cmd struct {
+		name string
+		desc string
+	}
+
+	cmds := []cmd{
+		{"dtmsvr", "run dtm as a server"},
+		{"dev", "create all needed table and run dtm as a server"},
+		{"quick_start", "run quick start example (dtm will create needed table)"},
+		{"qs", "same as quick_start"},
+	}
+
+	for name := range examples.Samples {
+		cmds = append(cmds, cmd{name, "run sample includes " + strings.ReplaceAll(name, "_", " ")})
+	}
+
+	for _, c := range cmds {
+		fmt.Fprintf(w, "\t%s\t%s\n", c.name, c.desc)
+	}
+	w.Flush()
+
+	return b.String()
 }
