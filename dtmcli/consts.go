@@ -1,32 +1,33 @@
 package dtmcli
 
+// Status transaction status
+type Status = string
+
 const (
-	// StatusPrepared status for global trans status. exists only in tran message
-	StatusPrepared = "prepared"
-	// StatusSubmitted StatusSubmitted status for global trans status.
-	StatusSubmitted = "submitted"
-	// StatusSucceed status for global trans status.
-	StatusSucceed = "succeed"
-	// StatusFailed status for global trans status.
-	StatusFailed = "failed"
+	StatusPrepared  Status = "prepared"  // transaction is in prepared
+	StatusSubmitted Status = "submitted" // transaction is submmited
+	StatusSucceed   Status = "succeed"   // transaction has succeeded
+	StatusFailed    Status = "failed"    // transaction has failed
+)
 
-	// BranchTry branch type for TCC
-	BranchTry = "try"
-	// BranchConfirm branch type for TCC
-	BranchConfirm = "confirm"
-	// BranchCancel branch type for TCC
-	BranchCancel = "cancel"
-	// BranchAction branch type for message, SAGA, XA
-	BranchAction = "action"
-	// BranchCompensate branch type for SAGA
-	BranchCompensate = "compensate"
-	// BranchCommit branch type for XA
-	BranchCommit = "commit"
-	// BranchRollback branch type for XA
-	BranchRollback = "rollback"
+// Branch transaction branch
+type Branch = string
 
-	// ResultSuccess for result of a trans/trans branch
-	ResultSuccess = "SUCCESS"
-	// ResultFailure for result of a trans/trans branch
-	ResultFailure = "FAILURE"
+const (
+	BranchTry     Branch = "try"     // TCC try branch
+	BranchConfirm Branch = "confirm" // TCC confirm branch
+	BranchCancel  Branch = "cancel"  // TCC cancel branch
+
+	BranchAction     Branch = "action"     // Message, Saga, XA transaction action branch
+	BranchCompensate Branch = "compensate" // Saga transaction compensate branch
+	BranchCommit     Branch = "commit"     // XA transaction commit branch
+	BranchRollback   Branch = "rollback"   // XA transaction rollback branch
+)
+
+// Result transaction result
+type Result = string
+
+const (
+	ResultSuccess Result = "SUCCESS" // transaction branch success
+	ResultFailure Result = "FAILURE" // transaction branch failed
 )
